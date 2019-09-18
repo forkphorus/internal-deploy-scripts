@@ -50,12 +50,11 @@ apply_index_mods() {
 
 get_old_commit() {
   cd $deploy
-  local commit=$(git log --pretty=format:'%s' -n 1)
-  if [[ $commit =~ Deploy\ ([a-f0-9]{40}) ]]; then
-    echo ${BASH_REMATCH[1]}
+  local commits=$(git log --pretty=format:'%s' -n 20 | grep '[$1]')
+  if [[ $commits =~ [a-f0-9]{40} ]]; then
+    echo $BASH_REMATCH
   else
-    echo "Cannot find commit"
-    exit 1
+    echo "???"
   fi
 }
 
@@ -65,7 +64,6 @@ get_current_commit() {
 }
 
 yes_or_no() {
-  echo
   # https://stackoverflow.com/a/29436423
   while true; do
     read -p "[Deploy] $* [y/n]: " yn
@@ -75,9 +73,6 @@ yes_or_no() {
     esac
   done
 }
-
-oldCommit=$(get_old_commit)
-newCommit=$(get_current_commit)
 
 echo "[Deploy] Updating repositories"
 
@@ -90,6 +85,15 @@ cd $source
 git reset --hard
 git checkout $branch
 git pull origin $branch -Xtheirs
+
+oldCommit=$(get_old_commit $branch)
+newCommit=$(get_current_commit)
+
+if [[ $oldCommit == $newCommit ]]; then
+  if ! yes_or_no "New commit and old commit appear to be the same. Continue? ($newCommit)"; then
+    exit 1
+  fi
+fi
 
 merge_trees $source $deploy
 merge_trees $dir/patches $deploy
@@ -118,13 +122,16 @@ echo "[Deploy] Modified files:"
 git status -s
 echo
 
+subject="[$branch] Deploy $newCommit"
+echo "[Deploy] Subject: $subject"
+
 if ! yes_or_no "Continue with commit?"; then
   exit 1
 fi
 
-git commit -m "[$branch] Deploy $newCommit" -m "https://github.com/forkphorus/forkphorus/compare/$oldCommit...$newCommit"
+git commit -m "$subject" -m "https://github.com/forkphorus/forkphorus/compare/$oldCommit...$newCommit"
 
-if yes_or_no "Complete deploy?"; then
+if yes_or_no "Push?"; then
   git push origin master
 else
   git reset --hard HEAD~1
@@ -132,5 +139,5 @@ else
 fi
 
 echo
-echo ":D"
+echo "Everything is good!"
 echo
