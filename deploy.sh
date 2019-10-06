@@ -12,6 +12,10 @@ else
   branch=master
 fi
 
+if [ ! -d "working" ]; then
+  ./init.sh
+fi
+
 deploy=$dir/working/deploy
 if [ "$branch" != "master" ]; then
   deploy=$deploy/$branch
@@ -77,9 +81,8 @@ yes_or_no() {
 echo "[Deploy] Updating repositories"
 
 cd $deploy
-git reset --hard
-git checkout master
-git pull origin master
+git fetch
+git reset --hard origin/master
 
 cd $source
 git reset --hard
@@ -120,6 +123,7 @@ git stage .
 
 echo "[Deploy] Modified files:"
 git status -s
+echo "(paths relative to $deploy)"
 echo
 
 subject="[$branch] Deploy $newCommit"
