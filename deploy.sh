@@ -78,6 +78,14 @@ yes_or_no() {
   done
 }
 
+scan_script() {
+  local script=$1
+  if [[ $(cat $script) =~ ' debugger;' ]]; then
+    echo "Found bad debugger statement in $script; aborting"
+    exit 1
+  fi
+}
+
 echo "[Deploy] Updating repositories"
 
 cd $deploy
@@ -106,6 +114,8 @@ echo "[Deploy] Installing & Building"
 cd $deploy
 npm ci
 npm run build
+
+scan_script phosphorus.dist.js
 
 echo "[Deploy] Running tests"
 cd tests
