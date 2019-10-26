@@ -1,4 +1,4 @@
 #!/bin/bash
 
-git clone https://github.com/forkphorus/forkphorus.github.io working/deploy
+git clone git@github.com:forkphorus/forkphorus.github.io.git working/deploy
 git clone https://github.com/forkphorus/forkphorus working/source
