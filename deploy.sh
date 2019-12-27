@@ -94,6 +94,7 @@ git reset --hard origin/master
 
 cd $source
 git reset --hard
+git fetch
 git checkout $branch
 git pull origin $branch -Xtheirs
 
@@ -120,12 +121,19 @@ scan_script phosphorus.dist.js
 echo "[Deploy] Running tests"
 cd tests
 if [ ! -d node_modules ]; then
-  npm ci
+  if [ "$branch" != "master" ]; then
+    if [ -d ../../tests/node_modules ]; then
+      ln -s ../../tests/node_modules node_modules
+    fi
+  fi
+  if [ ! -d node_modules ]; then
+    npm ci
+  fi
 fi
 node runner.js
 
 cd $deploy
-rm -r phosphorus tsconfig.json package.json package-lock.json dev.js
+rm -r src tsconfig.json package.json package-lock.json dev.js
 if [ "$branch" != "master" ]; then
   rm README.md LICENSE
 fi
