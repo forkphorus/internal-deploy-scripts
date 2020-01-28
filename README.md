@@ -5,17 +5,13 @@ The scripts that manage forkphorus.github.io
 Prepare the repositories:
 
 ```bash
-./init.sh
+# you may want to use SSH instead
+git clone https://github.com/forkphorus/forkphorus.github.io working/deploy
+git clone https://github.com/forkphorus/forkphorus working/source
 ```
 
 Deploy:
 
 ```bash
-./deploy.sh
-```
-
-Deploy a specific branch:
-
-```bash
-./deploy.sh branch-name
+./deploy.sh [branch]
 ```

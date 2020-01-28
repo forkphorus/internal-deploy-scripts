@@ -93,9 +93,9 @@ git fetch
 git reset --hard origin/master
 
 cd $source
-git reset --hard
-git fetch
+git fetch origin
 git checkout $branch
+git reset --hard origin/$branch
 git pull origin $branch -Xtheirs
 
 oldCommit=$(get_old_commit $branch)
