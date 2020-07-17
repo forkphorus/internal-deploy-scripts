@@ -36,15 +36,14 @@ apply_index_mods() {
   local content=`cat $index`
 
   cd $source
-  local versionText="Version $(git rev-parse --verify HEAD --short), updated $(date +%Y-%m-%d)"
+  local versionText="Version $(git rev-parse --verify HEAD --short) ($(date +%Y-%m-%d))"
   if [ "$branch" != "master" ]; then
     local versionText="$versionText [on branch $branch]"
     local html="<p><b>This is an experimental version of forkphorus. It may stop working at any time.</b></p>"
     local content="${content/<div id=\"app\">/<div id=\"app\">$html}"
   fi
-  local versionText="<p style=\"opacity:0.5;\"><small>$versionText</small></p>"
   cd $deploy
-  local content="${content/<!-- __deploybotinfosection__ -->/$versionText}"
+  local content="${content/<\/footer>/ - $versionText</footer>}"
 
   local google="<meta name="google-site-verification" content=\"fxogd82_Q_zvblLPSbkmRDktBJG5MK8mH8Xeg8ONDEc\" />"
   local content="${content/<\/title>/<\/title>$google}"
@@ -137,7 +136,7 @@ rm -r src tsconfig.json package.json package-lock.json dev.js
 if [ "$branch" != "master" ]; then
   rm README.md LICENSE
 fi
-git stage .
+git stage --all
 
 echo "[Deploy] Modified files:"
 git status -s
