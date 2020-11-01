@@ -52,7 +52,7 @@ apply_index_mods() {
 }
 
 apply_html_mods() {
-  local script='<script async defer src="stats.js"></script>';
+  local script='<script async defer src="/stats.js"></script>';
   for file in $(find . -type f -iname \*.html | grep -v node_modules); do
     local content=`cat $file`
     local content="${content/<\/head>/$script</head>}"
