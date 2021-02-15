@@ -51,15 +51,6 @@ apply_index_mods() {
   echo "$content" > $index
 }
 
-apply_html_mods() {
-  local script='<script async defer src="/stats.js"></script>';
-  for file in $(find . -type f -iname \*.html | grep -v node_modules); do
-    local content=`cat $file`
-    local content="${content/<\/head>/$script</head>}"
-    echo "$content" > $file
-  done
-}
-
 get_old_commit() {
   cd $deploy
   local commits=$(git log --pretty=format:'%s' -n 20 | grep '[$1]')
@@ -118,9 +109,6 @@ fi
 merge_trees $source $deploy
 merge_trees $dir/patches $deploy
 apply_index_mods
-
-cd $deploy
-apply_html_mods
 
 echo "[Deploy] Installing & Building"
 cd $deploy
