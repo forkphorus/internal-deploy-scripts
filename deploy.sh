@@ -117,19 +117,19 @@ npm run build
 
 scan_script phosphorus.dist.js
 
-echo "[Deploy] Running tests"
-cd tests
-if [ ! -d node_modules ]; then
-  if [ "$branch" != "master" ]; then
-    if [ -d ../../tests/node_modules ]; then
-      ln -s ../../tests/node_modules node_modules
-    fi
-  fi
-  if [ ! -d node_modules ]; then
-    npm ci
-  fi
-fi
-node runner.js
+# echo "[Deploy] Running tests"
+# cd tests
+# if [ ! -d node_modules ]; then
+#   if [ "$branch" != "master" ]; then
+#     if [ -d ../../tests/node_modules ]; then
+#       ln -s ../../tests/node_modules node_modules
+#     fi
+#   fi
+#   if [ ! -d node_modules ]; then
+#     npm ci
+#   fi
+# fi
+# node runner.js
 
 cd $deploy
 rm -r src tsconfig.json package.json package-lock.json dev.js
