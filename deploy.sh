@@ -150,7 +150,7 @@ if ! yes_or_no "Continue with commit?"; then
   exit 1
 fi
 
-git commit -m "$subject" -m "https://github.com/forkphorus/forkphorus/compare/$oldCommit...$newCommit"
+git commit -m "$subject" -m "https://github.com/forkphorus/forkphorus/compare/$oldCommit...$newCommit" --author="forkphorus deploy bot <forkphorusdeploybot@turbowarp.org>" --signoff
 
 if yes_or_no "Push?"; then
   git push origin master
