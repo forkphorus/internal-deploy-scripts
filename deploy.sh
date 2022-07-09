@@ -46,7 +46,8 @@ apply_index_mods() {
   local content="${content/<\/footer>/ - $versionText</footer>}"
 
   local google="<meta name=\"google-site-verification\" content=\"Re7zb-nm555twSGK216lVPDW-7v7ob1vQHYGQT3fBhE\" />"
-  local content="${content/<\/title>/<\/title>$google}"
+  local monetization="<meta name=\"monetization\" content=\"\$ilp.uphold.com/HpE3hGNaMEJW\">"
+  local content="${content/<\/title>/<\/title>$google$monetization}"
 
   echo "$content" > $index
 }
