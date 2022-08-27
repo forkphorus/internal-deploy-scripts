@@ -2,12 +2,14 @@
 
 The scripts that manage forkphorus.github.io
 
-Prepare the repositories:
+Prepare the repositories using HTTPS or SSH:
 
 ```bash
-# you may want to use SSH instead
-git clone https://github.com/forkphorus/forkphorus.github.io working/deploy
-git clone https://github.com/forkphorus/forkphorus working/source
+git clone git@github.com:forkphorus/forkphorus.github.io.git working/deploy
+git clone git@github.com:forkphorus/forkphorus.git working/source
+# or
+git clone https://github.com/forkphorus/forkphorus.github.io.git working/deploy
+git clone https://github.com/forkphorus/forkphorus.git working/source
 ```
 
 Deploy:
