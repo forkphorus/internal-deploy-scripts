@@ -32,27 +32,6 @@ merge_trees() {
   find . -type f | grep -v .git | xargs -I % rsync -R % $dest
 }
 
-apply_index_mods() {
-  local index="$deploy/index.html"
-  local content=`cat $index`
-
-  cd $source
-  local versionText="Version $(git rev-parse --verify HEAD --short) ($(date +%Y-%m-%d))"
-  if [ "$branch" != "master" ]; then
-    local versionText="$versionText [on branch $branch]"
-    local html="<p><b>This is an experimental version of forkphorus. It may stop working at any time.</b></p>"
-    local content="${content/<div id=\"app\">/<div id=\"app\">$html}"
-  fi
-  cd $deploy
-  local content="${content/<\/footer>/ - $versionText</footer>}"
-
-  local google="<meta name=\"google-site-verification\" content=\"Re7zb-nm555twSGK216lVPDW-7v7ob1vQHYGQT3fBhE\" />"
-  local monetization="<meta name=\"monetization\" content=\"\$ilp.uphold.com/gF2KGUfLzqAR\">"
-  local content="${content/<\/title>/<\/title>$google$monetization}"
-
-  echo "$content" > $index
-}
-
 get_old_commit() {
   cd $deploy
   local commits=$(git log --pretty=format:'%s' -n 20 | grep '[$1]')
@@ -108,9 +87,9 @@ if [[ $oldCommit == $newCommit ]]; then
   fi
 fi
 
-merge_trees $source $deploy
-merge_trees $dir/patches $deploy
-apply_index_mods
+merge_trees "$source" "$deploy"
+merge_trees "$dir/patches" "$deploy"
+python3 "$dir/apply-index-mods.py" "$deploy/index.html"
 
 echo "[Deploy] Installing & Building"
 cd $deploy
