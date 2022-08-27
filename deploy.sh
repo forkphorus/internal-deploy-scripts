@@ -28,7 +28,8 @@ merge_trees() {
   local source=$1
   local dest=$2
   cd $source
-  find . -type f | grep -v .git | xargs -I % cp % --parents $dest
+  # Ideally we would use cp --parent, but that doesn't work on macOS
+  find . -type f | grep -v .git | xargs -I % rsync -R % $dest
 }
 
 apply_index_mods() {
