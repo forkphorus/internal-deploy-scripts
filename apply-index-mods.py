@@ -13,9 +13,7 @@ with open(file, 'r') as f:
   contents = contents.replace('</footer>', f' - {version_text}</footer>')
 
   google = '<meta name="google-site-verification" content="Re7zb-nm555twSGK216lVPDW-7v7ob1vQHYGQT3fBhE" />'
-  monetization = '<meta name="monetization" content="$ilp.uphold.com/gF2KGUfLzqAR">'
-  extra_head_tags = f'{google}{monetization}'
-  contents = contents.replace('</head>', f'{extra_head_tags}</head>')
+  contents = contents.replace('</head>', f'{google}</head>')
 
 with open(file, 'w') as f:
   f.write(contents)
