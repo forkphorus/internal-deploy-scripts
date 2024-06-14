@@ -89,6 +89,8 @@ fi
 
 merge_trees "$source" "$deploy"
 merge_trees "$dir/patches" "$deploy"
+
+cd "$source"
 python3 "$dir/apply-index-mods.py" "$deploy/index.html"
 
 echo "[Deploy] Installing & Building"
